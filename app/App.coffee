@@ -1,5 +1,5 @@
-{Processor} = require 'Processor'
-{Config} = require 'Config'
+{Processor} = require './Processor'
+{Config} = require './Config'
 
 class App extends Processor
   reserveRead: () ->

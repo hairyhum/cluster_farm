@@ -1,4 +1,4 @@
-{Config} = require 'Config'
+{Config} = require './Config'
 class Web extends Processor
   reserveRead: () ->
     Config.web_reserve_read

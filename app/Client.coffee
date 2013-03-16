@@ -1,7 +1,7 @@
-{Request, RequestType} = require 'Request'
-{Events} = require 'Observer'
-{Component} = require 'Component'
-{Config} = require 'Config'
+{Request, RequestType} = require './Request'
+{Events} = require './Observer'
+{Component} = require './Component'
+{Config} = require './Config'
 
 
 class Client extends Component

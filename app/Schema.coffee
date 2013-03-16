@@ -1,6 +1,6 @@
-{Config} = require 'Config'
-{Network} = require 'Network'
-{Router} = require 'Router'
+{Config} = require './Config'
+{Network} = require './Network'
+{Router} = require './Router'
 
 class Schema
   constructor: () ->

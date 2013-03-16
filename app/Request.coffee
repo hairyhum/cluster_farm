@@ -1,4 +1,4 @@
-{Events} = require 'Observer'
+{Events} = require './Observer'
 
 class Request extends Observer
   constructor: (@type, @timeout) ->

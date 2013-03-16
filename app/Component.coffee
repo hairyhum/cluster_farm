@@ -1,5 +1,5 @@
-{Events} = require 'Observer'
-{Config} = require 'Config'
+{Events} = require './Observer'
+{Config} = require './Config'
 
 class Component
   constructor: () ->

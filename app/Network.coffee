@@ -1,5 +1,5 @@
-{Component} = require 'Component'
-{Config} = require 'Config'
+{Component} = require './Component'
+{Config} = require './Config'
 
 class Network extends Component
   latency: () -> Config.network_latency

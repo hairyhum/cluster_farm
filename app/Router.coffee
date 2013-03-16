@@ -1,4 +1,4 @@
-{Config} = require 'Config'
+{Config} = require './Config'
 
 class Router extends Component
   latency: () -> Config.router_latency

@@ -1,6 +1,6 @@
-{Component} = require 'Component'
-{Config} = require 'Config'
-{Events} = require 'Observer'
+{Component} = require './Component'
+{Config} = require './Config'
+{Events} = require './Observer'
 
 class Processor extends Component
   constructor: () ->
