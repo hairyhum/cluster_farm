@@ -118,8 +118,7 @@ class Schema
       r.source instanceof Router or 
       r.source?.source instanceof Router
 
+  getElementById: (id) ->
+    (@components.filter (c) -> c.getId() is id)[0]
 
 exports.Schema = Schema
-
-
-

@@ -3,9 +3,11 @@
 {Config} = require './Config'
 {DB} = require './DB'
 {Network} = require './Network'
-{Request} = require './Request'
+{Request, RequestType} = require './Request'
 {Schema} = require './Schema'
 {Web} = require './Web'
+{Component} = require './Component'
+{Events, Observer} = require './Observer'
 
 Simulator = {
   App
@@ -13,9 +15,13 @@ Simulator = {
   Config
   DB
   Network
-  Request
   Schema
   Web
+  Component
+  Request
+  RequestType
+  Events
+  Observer
 }
 
 exports.Simulator = Simulator
