@@ -1,7 +1,11 @@
 class Request extends Observer
   constructor: (@type, @timeout) ->
     @age = 0
+    super
   
+  event_subscribers: (event) ->
+    @subscribers[event]
+   
   isRead: () -> @type == RequestType.read
   isWrite: () -> @type == RequestType.write
   
