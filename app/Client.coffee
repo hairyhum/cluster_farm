@@ -22,7 +22,6 @@ class Client extends Component
     @reset()
     concurrent_requests = @generate_requests(concurrency, request_timeout, rw_ratio)
     timeout = (delay / concurrency) * Config.latency_ratio
-
     concurrent_requests.forEach (req) =>
       req.subscribe Events.terminate, (req) =>
         @onRequestTerminated(req)

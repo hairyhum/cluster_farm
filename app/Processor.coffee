@@ -8,16 +8,19 @@ class Processor extends Component
     @resource_reserved = 0
     super()
 
-
-  process: (req) ->
-    @reserveResource(req)
-    super req
-
-  reserveResource: (req) ->
+  processCallback: (req) ->
     reserves = @requestReserves(req)
-    @resource_reserved += reserves
-    req.subscribe Events.terminate, (req) =>
-      @resource_reserved -= reserves
+    new_reserved = @resource_reserved + reserves 
+    if new_reserved > @resource_limit
+      () => 
+        req.incAge @latency()
+        @process(req)
+    else
+      @resource_reserved = new_reserved
+      req.subscribe Events.terminate, (req) =>
+        @resource_reserved -= reserves
+      super(req)
+  
 
   requestReserves: (req) ->
     if req.isRead()
@@ -29,11 +32,8 @@ class Processor extends Component
     @min_latency() + Math.pow(@exp_base(), @resource_reserved)
 
   exp_base: () ->
-    max_latency = @max_latency()
-    min_latency = @min_latency()
-    val = Math.log (max_latency - min_latency)
-    base = Math.log 100
-    val / base
+    lat_diff = @max_latency() - @min_latency()
+    @min_latency() + (5 / lat_diff)
 
   max_latency: () ->
     Config.proc_max_latency

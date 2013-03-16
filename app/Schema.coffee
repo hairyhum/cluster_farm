@@ -61,10 +61,12 @@ class Schema
           router = new Router
           router.add_dest old_destination
           src.add_dest router
+          @routers.push router
           router
       else
         src
       net_src.add_dest network
+      @networks.push network
     @optimize()
 
   disconnectComponents: (src, dest) ->
@@ -111,7 +113,7 @@ class Schema
     
   hasNetworkTrees: () ->
     network_loops = @networks.some (n) ->
-      n.source instanceof Network or network.destination() instanceof Network
+      n.source instanceof Network or n.destination() instanceof Network
     router_loops = @routers.some (r) ->
       r.source instanceof Router or 
       r.source?.source instanceof Router

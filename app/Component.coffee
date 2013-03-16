@@ -55,14 +55,22 @@ class Component
     @fire req.passingEvent(), req
 
   process: (req) ->
-    req.incAge @latency()
-    callback = if @destinations.length == 0
-      () -> req.terminate()
-    else
-      () => @passRequest req
-      
+    callback = @processCallback req
     timeout = Config.latency_ratio * @latency()
     setTimeout callback, timeout
+  
+  processCallback: (req) ->
+    if @destinations.length == 0
+      () => 
+        req.incAge @latency()
+        # console.log req.age
+        req.terminate()
+    else
+      () => 
+        req.incAge @latency()
+        @passRequest req
+      
+
 
   events: () ->
     [Events.read_request, Events.write_request]
