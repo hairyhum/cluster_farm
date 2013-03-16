@@ -21,6 +21,12 @@ class Request extends Observer
     else if @isWrite()
       Events.write_request
 
+  isFailed: () ->
+    @age >= @timeout
+
+  isPassed: () ->
+    @age < @timeout
+
 RequestType = 
   read: 'read'
   write: 'write'
