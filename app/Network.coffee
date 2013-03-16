@@ -1,3 +1,6 @@
+{Component} = require 'Component'
+{Config} = require 'Config'
+
 class Network extends Component
   latency: () -> Config.network_latency
   optimize: () -> 
@@ -17,3 +20,4 @@ class Network extends Component
       @remove_dest @destination()
 
 
+exports.Network = Network

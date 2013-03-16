@@ -1,3 +1,6 @@
+{Events} = require 'Observer'
+{Config} = require 'Config'
+
 class Component
   constructor: () ->
     @subscribers = {}
@@ -64,3 +67,4 @@ class Component
   events: () ->
     [Events.read_request, Events.write_request]
 
+exports.Component =  Component

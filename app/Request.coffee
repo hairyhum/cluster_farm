@@ -1,3 +1,5 @@
+{Events} = require 'Observer'
+
 class Request extends Observer
   constructor: (@type, @timeout) ->
     @age = 0
@@ -30,3 +32,6 @@ class Request extends Observer
 RequestType = 
   read: 'read'
   write: 'write'
+
+exports.Request = Request
+exports.RequestType = RequestType

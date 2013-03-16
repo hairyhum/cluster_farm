@@ -20,3 +20,6 @@ Events =
   read_request: 'read_request'
   write_request: 'write_request'
 
+
+exports.Observer = Observer
+exports.Events = Events

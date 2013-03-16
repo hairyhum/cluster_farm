@@ -1,3 +1,5 @@
+{Config} = require 'Config'
+
 class Router extends Component
   latency: () -> Config.router_latency
 
@@ -20,3 +22,5 @@ class Router extends Component
 
   random_choice: (count) ->
     Math.floor(Math.random() * count)
+
+exports.Router = Router

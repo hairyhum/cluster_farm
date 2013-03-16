@@ -1,3 +1,9 @@
+{Request, RequestType} = require 'Request'
+{Events} = require 'Observer'
+{Component} = require 'Component'
+{Config} = require 'Config'
+
+
 class Client extends Component
   constructor: () ->
     @failed =
@@ -45,3 +51,4 @@ Array::asyncForEach = (timeout, fn) ->
       setTimeout iterFun, timeout
   setTimeout(iterFun, 0)
 
+exports.Client = Client

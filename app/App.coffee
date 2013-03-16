@@ -1,3 +1,6 @@
+{Processor} = require 'Processor'
+{Config} = require 'Config'
+
 class App extends Processor
   reserveRead: () ->
     Config.app_reserve_read
@@ -5,4 +8,4 @@ class App extends Processor
   reserveWrite: () ->
     Config.app_reserve_write
 
-  
+exports.App = App

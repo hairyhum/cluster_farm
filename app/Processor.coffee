@@ -1,3 +1,7 @@
+{Component} = require 'Component'
+{Config} = require 'Config'
+{Events} = require 'Observer'
+
 class Processor extends Component
   constructor: () ->
     @resource_limit = Config.resource_limit
@@ -34,3 +38,4 @@ class Processor extends Component
   min_latency: () ->
     Config.proc_min_latency
       
+exports.Processor = Processor

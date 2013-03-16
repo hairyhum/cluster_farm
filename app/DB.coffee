@@ -1,3 +1,6 @@
+{Processor} = require 'Processor'
+{Config} = require 'Config'
+
 class DB extends Processor
   reserveRead: () ->
     Config.db_reserve_read
@@ -5,4 +8,5 @@ class DB extends Processor
   reserveWrite: () ->
     Config.db_reserve_write
 
+exports.DB = DB
   

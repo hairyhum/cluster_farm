@@ -1,3 +1,7 @@
+{Config} = require 'Config'
+{Network} = require 'Network'
+{Router} = require 'Router'
+
 class Schema
   constructor: () ->
     @components = [new Client()]
@@ -88,7 +92,7 @@ class Schema
       r.source.source instanceof Router
 
 
-
+exports.Schema = Schema
 
 
 
