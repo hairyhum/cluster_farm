@@ -11,6 +11,11 @@ class Schema
     @networks = []
     @routers = []
 
+  runClient: (concurrency, delay, request_timeout, rw_ratio) ->
+    if @validate()
+      @client.run concurrency, delay, request_timeout, rw_ratio
+    else
+      throw "Invalid schema"
 
   addComponent: (component) ->
     @components.push component
@@ -93,9 +98,9 @@ class Schema
       sources = []
       sources.push component.source
       loopFun = (component) ->
-        if (sources.filter (s) -> s is component.source).length > 0
+        if component? and (sources.filter (s) -> s is component.source).length > 0
           return true
-        unless component.source?
+        unless component?.source?
           return false
         sources.push component.source
         loopFun component.source
