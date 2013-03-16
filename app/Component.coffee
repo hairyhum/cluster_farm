@@ -39,8 +39,8 @@ class Component
       @subscribe event, callback
 
   remove_dest: (component) ->
-    {component, callback} = @destinations.filter (dest) ->
-      dest.component is component
+    {component, callback} = (@destinations.filter (dest) ->
+      dest.component is component)[0]
     events = component.events()
     events.forEach (event) =>
       @unsubscribe event, callback

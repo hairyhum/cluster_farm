@@ -6,7 +6,7 @@ class Network extends Component
   optimize: () -> 
     if @source instanceof Network
       source = @source.source
-      @remove_source
+      @remove_source()
       @add_source source
     if @destination() instanceof Network
       dest = @destination().destination()
@@ -14,7 +14,7 @@ class Network extends Component
       @add_dest dest
 
     unless @destination()?
-      @remove_source
+      @remove_source()
 
     unless @source
       @remove_dest @destination()

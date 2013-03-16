@@ -29,6 +29,11 @@ class Client extends Component
     concurrent_requests.asyncForEach timeout, (req, index) =>
       @passRequest req
 
+  report: () ->
+    {
+      passed: @passed
+      failed: @failed
+    }
   onRequestTerminated: (req) ->
     req_type = if req.isRead()
       'read'

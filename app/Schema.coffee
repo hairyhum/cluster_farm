@@ -23,10 +23,14 @@ class Schema
 
   isAdded: (component) ->
     @components.some (c) -> c is component
+  
+  root: () ->
+    @client.destination()?.destination()
 
   setRoot: (component) ->
     unless @isAdded component
       throw 'Component is not added'
+    @disconnectComponents @client, @root()
     @connectComponents @client, component
     component
 
@@ -48,7 +52,7 @@ class Schema
         if old_destination instanceof Router
           old_destination
         else if old_destination instanceof Network
-          old_destination.remove_source
+          old_destination.remove_source()
           router = new Router
           router.add_dest old_destination
           src.add_dest router
@@ -61,12 +65,13 @@ class Schema
   disconnectComponents: (src, dest) ->
     #TODO: assert not router or network
     if @isConnected src, dest
+      console.log 'connected'
       network = dest.source
-      dest.remove_source
+      dest.remove_source()
       net_src = network.source
-      network.remove_source
+      network.remove_source()
       if net_src instanceof Router
-        router.optimize
+        net_src.optimize
     @optimize()
 
   isConnected: (src, dest) ->
@@ -85,19 +90,19 @@ class Schema
   
   hasLoops: () ->
     hasLocalLoops = (component) ->
-    sources = []
-    sources.push component.source
-    loopFun = (component) ->
-      if (sources.filter (s) -> s is component.source).length > 0
-        return true
-      unless component.source?
-        return false
+      sources = []
       sources.push component.source
+      loopFun = (component) ->
+        if (sources.filter (s) -> s is component.source).length > 0
+          return true
+        unless component.source?
+          return false
+        sources.push component.source
+        loopFun component.source
+
       loopFun component.source
 
-    loopFun component.source
-
-    components.some hasLocalLoops
+    @components.some hasLocalLoops
     
   hasNetworkTrees: () ->
     network_loops = @networks.some (n) ->

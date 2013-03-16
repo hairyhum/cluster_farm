@@ -15,11 +15,11 @@ class Router extends Component
     if @destinations.length == 1
       source = @source
       dest = @destination()
-      @remove_source
+      @remove_source()
       @remove_dest dest
       source.add_dest dest
     else if @destinations.length == 0
-      @remove_source
+      @remove_source()
 
   random_choice: (count) ->
     Math.floor(Math.random() * count)
