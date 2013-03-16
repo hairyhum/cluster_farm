@@ -3,7 +3,7 @@ class Observer
     @subscribers = {}
     
   subscribe: (event, fn) ->
-    if @subscribers[event]?
+    unless @subscribers[event]?
       @subscribers[event] = []
     @subscribers[event].push fn
 

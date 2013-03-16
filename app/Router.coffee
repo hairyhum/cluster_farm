@@ -1,4 +1,5 @@
 {Config} = require './Config'
+{Component} = require './Component'
 
 class Router extends Component
   latency: () -> Config.router_latency
@@ -13,7 +14,7 @@ class Router extends Component
   optimize: () ->
     if @destinations.length == 1
       source = @source
-      dest = @destinations[0]
+      dest = @destination()
       @remove_source
       @remove_dest dest
       source.add_dest dest

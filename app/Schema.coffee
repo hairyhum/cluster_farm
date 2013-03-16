@@ -1,26 +1,41 @@
 {Config} = require './Config'
 {Network} = require './Network'
 {Router} = require './Router'
+{Client} = require './Client'
 
 class Schema
+
   constructor: () ->
-    @components = [new Client()]
+    @client = new Client()
+    @components = [@client]
     @networks = []
     @routers = []
 
+
   addComponent: (component) ->
     @components.push component
+    component
 
   removeComponent: (component) ->
     @components = @components.filter (c) -> c isnt component
     @optimize()
+    component
+
+  isAdded: (component) ->
+    @components.some (c) -> c is component
+
+  setRoot: (component) ->
+    unless @isAdded component
+      throw 'Component is not added'
+    @connectComponents @client, component
+    component
 
   componentSource: (dest) ->
-    network = dest.source
-    if network.source instanceof Router
+    network = dest?.source
+    if network?.source instanceof Router
       network.source.source
     else
-      network.source
+      network?.source
 
   connectComponents: (src, dest) ->
     #TODO: assert not router or network
@@ -28,8 +43,8 @@ class Schema
       network = new Network
       network.add_dest dest
 
-      net_src = if src.hasDestinations
-        old_destination = src.destinations[0]
+      net_src = if src.hasDestinations()
+        old_destination = src.destination()
         if old_destination instanceof Router
           old_destination
         else if old_destination instanceof Network
@@ -40,7 +55,7 @@ class Schema
           router
       else
         src
-      real_src.add_dest network
+      net_src.add_dest network
     @optimize()
 
   disconnectComponents: (src, dest) ->
@@ -55,7 +70,7 @@ class Schema
     @optimize()
 
   isConnected: (src, dest) ->
-    componentSource(dest) is src
+    @componentSource(dest) is src
       
   optimize: () ->
     @networks.forEach (n) -> n.optimize()
@@ -71,7 +86,7 @@ class Schema
   hasLoops: () ->
     hasLocalLoops = (component) ->
     sources = []
-    sources.push = component.source
+    sources.push component.source
     loopFun = (component) ->
       if (sources.filter (s) -> s is component.source).length > 0
         return true
@@ -89,7 +104,7 @@ class Schema
       n.source instanceof Network or network.destination() instanceof Network
     router_loops = @routers.some (r) ->
       r.source instanceof Router or 
-      r.source.source instanceof Router
+      r.source?.source instanceof Router
 
 
 exports.Schema = Schema

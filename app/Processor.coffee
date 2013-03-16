@@ -6,24 +6,27 @@ class Processor extends Component
   constructor: () ->
     @resource_limit = Config.resource_limit
     @resource_reserved = 0
+    super()
+
 
   process: (req) ->
     @reserveResource(req)
     super req
 
   reserveResource: (req) ->
-    @resource_reserved += @requestReserves(req)
+    reserves = @requestReserves(req)
+    @resource_reserved += reserves
     req.subscribe Events.terminate, (req) =>
-      @resource_reserved -= @requestReserves(req)
+      @resource_reserved -= reserves
 
   requestReserves: (req) ->
     if req.isRead()
-      reserveRead()
+      @reserveRead()
     else if req.isWrite()
-      reserveWrite()
+      @reserveWrite()
 
   latency: () ->
-    min_latency + Math.pow(@exp_base(), @resource_reserved)
+    @min_latency() + Math.pow(@exp_base(), @resource_reserved)
 
   exp_base: () ->
     max_latency = @max_latency()

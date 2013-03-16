@@ -8,7 +8,7 @@
 {Web} = require './Web'
 
 Simulator = {
-  app
+  App
   Client
   Config
   DB

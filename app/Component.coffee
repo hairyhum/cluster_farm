@@ -7,7 +7,7 @@ class Component
     @destinations = []
 
   destination: () ->
-    @destinations[0]
+    @destinations[0]?.component
 
   subscribe: (event, fn) ->
     if @subscribers[event]?
@@ -52,11 +52,11 @@ class Component
     @destinations.length > 0
 
   passRequest: (req) ->
-    @fire req.passingEvent, req
+    @fire req.passingEvent(), req
 
   process: (req) ->
     req.incAge @latency()
-    callback = if @destinations == []
+    callback = if @destinations.length == 0
       () -> req.terminate()
     else
       () => @passRequest req

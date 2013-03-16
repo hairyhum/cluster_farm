@@ -6,6 +6,10 @@
 
 class Client extends Component
   constructor: () ->
+    @reset()
+    super()
+
+  reset: () ->
     @failed =
       read: 0
       write: 0
@@ -15,24 +19,24 @@ class Client extends Component
       write: 0
 
   run: (concurrency, delay, request_timeout, rw_ratio) ->
-    concurrent_requests = generate_requests(concurrency, request_timeout, rw_ratio)
+    @reset()
+    concurrent_requests = @generate_requests(concurrency, request_timeout, rw_ratio)
     timeout = (delay / concurrency) * Config.latency_ratio
 
     concurrent_requests.forEach (req) =>
       req.subscribe Events.terminate, (req) =>
         @onRequestTerminated(req)
-
-    concurrent_requests.asyncForEach timeout, (req, index) ->
+    concurrent_requests.asyncForEach timeout, (req, index) =>
       @passRequest req
 
   onRequestTerminated: (req) ->
-    req_type = if req.isRead
+    req_type = if req.isRead()
       'read'
-    else if req.isWrite
+    else if req.isWrite()
       'write'
-    if req.isFailed
+    if req.isFailed()
       @failed[req_type]++
-    else if req.isPassed
+    else if req.isPassed()
       @passed[req_type]++
 
   generate_requests: (concurrency, request_timeout, rw_ratio) ->

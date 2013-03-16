@@ -6,7 +6,7 @@ Config =
   web_reserve_write: 4
   web_reserve_read: 4
   
-  latency_ratio: 10
+  latency_ratio: 1
   network_latency: 1
   router_latency: 0
   resource_limit: 100

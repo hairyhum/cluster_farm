@@ -3,7 +3,7 @@
 class Request extends Observer
   constructor: (@type, @timeout) ->
     @age = 0
-    super
+    super()
   
   event_subscribers: (event) ->
     @subscribers[event]
