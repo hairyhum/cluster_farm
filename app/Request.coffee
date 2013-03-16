@@ -9,8 +9,13 @@ class Request extends Observer
     @age += time
 
   terminate: () ->
-    @fire(Events.terminate)    
+    @fire(Events.terminate, @)    
 
+  passingEvent: () ->
+    if @isRead()
+      Events.read_request
+    else if @isWrite()
+      Events.write_request
 
 RequestType = 
   read: 'read'

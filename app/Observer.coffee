@@ -1,17 +1,19 @@
 class Observer
   constructor: () ->
-    @subscribers = []
+    @subscribers = {}
 
-  subscribe: (fn) ->
-    @subscribers.push fn
+  subscribe: (event, fn) ->
+    unless @subscribers[event]?
+      @subscribers[event] = []
+    @subscribers[event].push fn
 
-  unsubscribe: (fn) ->
-    @subscribers = @subscribers.filter (el) -> el isnt fn
+  unsubscribe: (event, fn) ->
+    if @subscribers[event]?
+      @subscribers[event] = @subscribers[event].filter (el) -> el isnt fn
 
   fire: (event, param) ->
-    @subscribers.forEach (subscr) -> 
-      subscr(event, param)
-
+    @subscribers[event]?.forEach (subscr) -> 
+      subscr(param)
 
 Events = 
   terminate: 'terminate'
