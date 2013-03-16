@@ -3,6 +3,8 @@ class Component
     @subscribers = {}
     @destinations = []
 
+  destination: () ->
+    @destinations[0]
 
   subscribe: (event, fn) ->
     if @subscribers[event]?
@@ -15,15 +17,36 @@ class Component
   fire: (event, param) ->
     @subscribers[event]?(param)
 
-  connect_to_source: (source) ->
+  add_source: (source) ->
     source.add_dest @
 
-  add_dest: (dest) ->
-    @destinations.push dest
-    events = dest.events()
-    events.forEach (event) ->
-      source.subscribe event, (req) ->
-        dest.process req
+  remove_source: () ->
+    @source.remove_dest @
+
+  add_dest: (component) ->
+    component.source = @
+    callback = (req) ->
+      component.process req
+    @destinations.push {
+      component: component
+      callback: callback
+    }
+    events = component.events()
+    events.forEach (event) =>
+      @subscribe event, callback
+
+  remove_dest: (component) ->
+    {component, callback} = @destinations.filter (dest) ->
+      dest.component is component
+    events = component.events()
+    events.forEach (event) =>
+      @unsubscribe event, callback
+    @destinations = @destinations.filter (dest) ->
+      dest.component isnt component
+    component.source = undefined
+
+  hasDestinations: () ->
+    @destinations.length > 0
 
   passRequest: (req) ->
     @fire req.passingEvent, req
@@ -40,3 +63,4 @@ class Component
 
   events: () ->
     [Events.read_request, Events.write_request]
+
