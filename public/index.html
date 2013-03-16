@@ -5,6 +5,7 @@
     <title>Cluster Crazy Farm</title>
     <script type="text/javascript" src="javascripts/vendor.js"></script>
     <script type="text/javascript" src="javascripts/app.js"></script>
+    <script type="text/javascript" src="wraper.js"></script>
 </head>
 <body>
 <div id="panel"></div>
@@ -28,7 +29,6 @@
     onclick="create_obj()"
     panel_shapes.push(panel.image("images/database_3.png",0,0,100,100));
 //    panel.image('images/server.svg')
-
     var connections = [];
     var shapes = god.set();
 
@@ -136,7 +136,6 @@
             shapes[i].click(function(e) {change_wtf(this, e); });
 
         }
-
         for (var i = 0, ii = panel_shapes.length; i < ii; i++) {
             var color = Raphael.getColor();
 //            panel_shapes[i].attr({fill: color, stroke: color, "fill-opacity": 0, "stroke-width": 2, cursor: "move"});
@@ -226,6 +225,7 @@
             rectangle.click(function(e) {change_wtf(this, e); });
             shapes.push(rectangle);
         };
+
 
 
 
