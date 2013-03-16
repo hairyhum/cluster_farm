@@ -1,12 +1,19 @@
 {Request, RequestType} = require '../app/Request'
 
 exports.RequestTest =
+	getReadType: () -> RequestType.read
+	getWriteType: () -> RequestType.read
+	getTimeout: () -> 600
+	getAge: () -> 0
+
+	setUp: (callback) ->
+        @request = new Request(getReadType(), getTimeout())
+        callback()
 
 	'test constructor': (test) ->
 		timeout = 600
 		age = 0
-		request = new Request(RequestType.read, timeout)
-		test.equal(request.type, RequestType.read)
-		test.equal(request.timeout, timeout)
-		test.equal(request.age, age)
+		test.equal(@request.type, getReadType())
+		test.equal(@request.timeout, getTimeout())
+		test.equal(@request.age, getAge())
 		test.done()
