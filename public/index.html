@@ -5,14 +5,13 @@
     <title>Cluster Crazy Farm</title>
     <script type="text/javascript" src="javascripts/vendor.js"></script>
     <script type="text/javascript" src="javascripts/app.js"></script>
-    <script type="text/javascript" src="wraper.js"></script>
 </head>
 <body>
+<div id="panel"></div>
 <input type="button" value="add_kvadrat" onclick="create_obj()">
 <input type="button" value="del_kvadrat" onclick="delete_obj()">
 <input type="button" value="add_strelka" onclick="touch_add_arr()">
 <input type="button" value="del_strelka" onclick="touch_del_arr()">
-
 <!-- the html element where to put the paper -->
 <div id="paper"></div>
 <script>
@@ -21,7 +20,14 @@
 //    var add = [];
 //    var paper = Raphael("paper", 500,500);
 <!---->
-    var god = Raphael("paper", 640, 480);
+    var god = Raphael("paper", 600, 380);
+
+    var panel = Raphael("panel", 200, 100);
+    var panel_shapes = panel.set();
+
+    onclick="create_obj()"
+    panel_shapes.push(panel.image("images/database_3.png",0,0,100,100));
+//    panel.image('images/server.svg')
 
     var connections = [];
     var shapes = god.set();
@@ -117,9 +123,10 @@
                         god.connection(connections[i]);
                     }
                     god.safari();
+                    panel.safari();
                 },
                 up = function () {
-                    this.animate({"fill-opacity": 0}, 500);
+                    this.animate({"fill-opacity": 1}, 500);
                 };
 //        group.onclick = function(e) {change_wtf(e);};
         for (var i = 0, ii = shapes.length; i < ii; i++) {
@@ -129,6 +136,15 @@
             shapes[i].click(function(e) {change_wtf(this, e); });
 
         }
+
+        for (var i = 0, ii = panel_shapes.length; i < ii; i++) {
+            var color = Raphael.getColor();
+//            panel_shapes[i].attr({fill: color, stroke: color, "fill-opacity": 0, "stroke-width": 2, cursor: "move"});
+            panel_shapes[i].drag(move, dragger, up);
+            panel_shapes[i].click(function(e) {new_panel_shape(this, e); });
+
+        }
+
         connections.push(god.connection(shapes[0], shapes[1], "#000"));
         connections.push(god.connection(shapes[1], shapes[2], "#000"));
         connections.push(god.connection(shapes[0], shapes[2], "#000"));
@@ -159,7 +175,6 @@
                 con = connections[i];
                 if (((con.from == mas[0]) && (con.to == mas[1])) || ((con.from == mas[1]) && (con.to == mas[0])))
                 {
-                    console.log(con.line);
                     con.line.remove();
 //                    connections = connections.splice(i,1);
 //                    connections.remove(i);
@@ -201,14 +216,16 @@
         delete_obj = function () {
             mas=[];
             state = 'del_obj';
-        }
+        };
 
-//        eve.on("raphael.event.click", function(evt){
-//            console.log('123')
-//        });
-//        eve.on("raphael.anim.frame.*", function(obj) {
-//              asd;
-//        };
+        new_panel_shape = function () {
+            rectangle = god.rect(0,0,120,125,0);
+            var color = "url(images/database_3.png)";
+            rectangle.attr({fill: color, stroke: color, "fill-opacity": 1, "stroke-width": 0, cursor: "move"});
+            rectangle.drag(move, dragger, up);
+            rectangle.click(function(e) {change_wtf(this, e); });
+            shapes.push(rectangle);
+        };
 
 
 
