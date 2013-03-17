@@ -159,9 +159,10 @@
 
         }
 
-        con = god.connection(shapes[0], shapes[1], "#000")
+        con = god.connection(shapes[0], shapes[1], "#888");
         connections.push(con);
-        con.getSubpath(con.from, con.to);
+        con.line.getSubpath(con.line.from, con.line.to);
+        console.log(con.line.getSubpath());
 //        connections.push(god.connection(shapes[1], shapes[2], "#000"));
 //        connections.push(god.connection(shapes[0], shapes[2], "#000"));
 //        connections.push(r.connection(shapes[1], shapes[3], "#000"));
@@ -244,6 +245,10 @@
             rectangle.click(function(e) {change_wtf(this, e); });
             shapes.push(rectangle);
         };
+
+
+
+//        Raphael().prepare("Paper.path-extra").path("M10,10R90,50 10,90").attr(Raphael.line());
 
 
 
