@@ -5,16 +5,16 @@
     <title>Cluster Crazy Farm</title>
     <script type="text/javascript" src="javascripts/vendor.js"></script>
     <script type="text/javascript" src="javascripts/app.js"></script>
-    <script type="text/javascript" src="wraper.js"></script>
     <script type='text/javascript' src='http://www.google.com/jsapi'></script>
 </head>
 <body>
+   <div id='chart_div'></div>
 <div>
     <input type="button" value="del_kvadrat" onclick="delete_obj()">
     <input type="button" value="add_strelka" onclick="touch_add_arr()">
     <input type="button" value="del_strelka" onclick="touch_del_arr()">
     <div id="panel">
-        <div id='chart_div'></div>
+        
     <!--<input type="button" value="add_kvadrat" onclick="create_obj()">-->
 
     </div>
@@ -24,6 +24,35 @@
 <!-- the html element where to put the paper -->
 <div id="paper">
 </div>
+ 
+
+<script type="text/javascript">
+
+    google.load('visualization', '1', {packages:['gauge']});
+    google.setOnLoadCallback(drawChart);
+    var data;
+    var chart;
+    var options;
+
+    function drawChart() {
+      data = new google.visualization.DataTable();
+      data.addColumn('string', 'Label');
+      data.addColumn('number', 'Value');
+      data.addRows(3);
+      data.setValue(0, 0, 'Нагрузка');
+      data.setValue(0, 1, 0);
+
+      chart = new google.visualization.Gauge(document.getElementById('chart_div'));
+
+      options = {width: 400, height: 120, redFrom: 90, redTo: 100,
+          yellowFrom:75, yellowTo: 90, minorTicks: 5};
+      chart.draw(data, options);
+    }
+
+
+  </script>
+
+
 
 <script>
     var mas = [];
@@ -251,26 +280,6 @@
 
 //        Raphael().prepare("Paper.path-extra").path("M10,10R90,50 10,90").attr(Raphael.line());
 
-        // google.load('visualization', '1', {packages:['gauge']});
-        // google.setOnLoadCallback(drawChart);
-        // var data;
-        // var chart;
-        // var options;
-        // function drawChart() {
-        //   data = new google.visualization.DataTable();
-        //   data.addColumn('string', 'Label');
-        //   data.addColumn('number', 'Value');
-        //   data.addRows(3);
-        //   data.setValue(0, 0, 'Нагрузка');
-        //   data.setValue(0, 1, 0);
-
-        //   chart = new google.visualization.Gauge(document.getElementById('chart_div'));
-
-        //   options = {width: 400, height: 120, redFrom: 90, redTo: 100,
-        //       yellowFrom:75, yellowTo: 90, minorTicks: 5};
-        //   chart.draw(data, options);
-        // }
-
 
         rectangle = god.rect(0,0,120,125,0);
 
@@ -296,8 +305,8 @@
             console.log(clientInfo) 
             stat = constructor.getStats()
             console.log(stat[0].resourceReserved)
-            // data.setValue(0, 1, stat[0].resourceReserved);
-            // chart.draw(data, options);
+            data.setValue(0, 1, stat[0].resourceReserved);
+            chart.draw(data, options);
         }, 500)
 
 
