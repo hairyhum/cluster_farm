@@ -47,7 +47,7 @@ class Constructor
 			@schema.disconnectComponents(secondElement, firstElement)
 	
 	getStats: () ->
-		@schema.components.map (c) ->
+		@schema.components.filter((c) => c isnt @schema.client).map (c) ->
 			{ id: c.id, resourceReserved: c.resource_reserved }
 
 exports.Constructor = Constructor
