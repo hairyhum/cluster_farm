@@ -1,3 +1,4 @@
+<<<<<<< HEAD
   {Simulator} = require './app/Simulator'
   {App, Web, DB, Schema} = Simulator
   schema = new Schema
@@ -12,3 +13,11 @@
   schema.setRoot app
   schema.client.run 15, 10, 100, 0.5
   console.log schema.client.report()
+=======
+# {Simulator} = require './app/Simulator'
+# {Web, Schema} = Simulator
+# schema = new Schema
+# root = schema.addComponent new Web
+# schema.setRoot root
+# schema.client.run 10, 10, 100, 0.5
+>>>>>>> add constructor
