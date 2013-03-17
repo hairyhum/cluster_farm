@@ -48,6 +48,6 @@ class Constructor
 	
 	getStats: () ->
 		@schema.components.map (c) ->
-			{ id: c.id, resourceReserved: c.resource_reserved?() }
+			{ id: c.id, resourceReserved: c.resource_reserved? }
 
 exports.Constructor = Constructor
