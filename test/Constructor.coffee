@@ -3,9 +3,6 @@
 
 exports.constrTest =
 	'test addElement': (test) ->
-		# type = Web
-		# o = new type
-		# console.log(o)
 		@constr = new Constructor()	
 		@constr.addElement(Web)
 		test.equal(2, @constr.schema.components.length)
