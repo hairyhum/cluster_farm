@@ -6,6 +6,7 @@
     <script type="text/javascript" src="javascripts/vendor.js"></script>
     <script type="text/javascript" src="javascripts/app.js"></script>
     <script type="text/javascript" src="wraper.js"></script>
+    <script type='text/javascript' src='http://www.google.com/jsapi'></script>
 </head>
 <body>
 <div>
@@ -13,10 +14,12 @@
     <input type="button" value="add_strelka" onclick="touch_add_arr()">
     <input type="button" value="del_strelka" onclick="touch_del_arr()">
     <div id="panel">
+        <div id='chart_div'></div>
     <!--<input type="button" value="add_kvadrat" onclick="create_obj()">-->
 
     </div>
 </div>
+
 
 <!-- the html element where to put the paper -->
 <div id="paper">
@@ -246,11 +249,56 @@
         };
 
 
-
 //        Raphael().prepare("Paper.path-extra").path("M10,10R90,50 10,90").attr(Raphael.line());
 
+        // google.load('visualization', '1', {packages:['gauge']});
+        // google.setOnLoadCallback(drawChart);
+        // var data;
+        // var chart;
+        // var options;
+        // function drawChart() {
+        //   data = new google.visualization.DataTable();
+        //   data.addColumn('string', 'Label');
+        //   data.addColumn('number', 'Value');
+        //   data.addRows(3);
+        //   data.setValue(0, 0, 'Нагрузка');
+        //   data.setValue(0, 1, 0);
+
+        //   chart = new google.visualization.Gauge(document.getElementById('chart_div'));
+
+        //   options = {width: 400, height: 120, redFrom: 90, redTo: 100,
+        //       yellowFrom:75, yellowTo: 90, minorTicks: 5};
+        //   chart.draw(data, options);
+        // }
 
 
+        rectangle = god.rect(0,0,120,125,0);
+
+        sim = require("Simulator");
+        console.log(sim)
+        Constructor = sim.Simulator.Constructor;
+        Web = sim.Simulator.Web
+        constructor = new Constructor()
+        var elem_id = constructor.addElement(Web)
+        constructor.setRoot(elem_id)
+        concurrency = 200
+        delay = 10
+        request_timeout = 100
+        rw_ratio = 0.5
+
+        start = constructor.start(concurrency, delay, request_timeout, rw_ratio)
+
+        var interval = setInterval(function(){
+            var clientInfo = constructor.getClientInfo()
+            if ((clientInfo.failed.read + clientInfo.failed.write + clientInfo.passed.read + clientInfo.passed.write) == concurrency) {
+                clearInterval(interval)
+            }
+            console.log(clientInfo) 
+            stat = constructor.getStats()
+            console.log(stat[0].resourceReserved)
+            // data.setValue(0, 1, stat[0].resourceReserved);
+            // chart.draw(data, options);
+        }, 500)
 
 
         };
@@ -258,38 +306,6 @@
 
 <!-- a script that create's a paper and a rectangle -->
 
-<form>
-
-  <input name="app_reserve_write" id="app_reserve_write" type="range" min="0" max="10" step="1" />
-
-  <input name="app_reserve_write" id="app_reserve_write" type="range" min="0" max="10" step="1" value="1" />
-  <input name="app_reserve_read" id="app_reserve_read" type="range" min="0" max="10" step="1" value="3" />
-  
-  <input name="db_reserve_write" id="db_reserve_write" type="range" min="0" max="10" step="1" value="1" />
-  <input name="db_reserve_read" id="db_reserve_read" type="range" min="0" max="10" step="1" value="3" />
-
-  <input name="web_reserve_write" id="web_reserve_write" type="range" min="0" max="10" step="1" value="4" />
-  <input name="web_reserve_read" id="web_reserve_read" type="range" min="0" max="10" step="1" value="4" />
-  <input name="network_latency" id="network_latency" type="range" min="0" max="10" step="1" value="1" />
-  <input name="router_latency" id="router_latency" type="range" min="0" max="10" step="1" value="0" />
-
-
-  <input name="latency_ratio" id="latency_ratio" type="range" min="0" max="100" step="1" value="10" />
-  
-  <input name="resource_limit" id="resource_limit" type="range" min="0" max="200" step="1" value="100" />
-
-  <button id="save_settings" onClick="saveSettingsClick">Apply</button>
-
-</form>
-
-<form>
-    Concurrency: <input name="concurrency" id="concurrency"></input>
-    Time: <input name="delay" id="delay"></input>
-    Timeout: <input name="timeout" id="timeout"></input>
-    Read/Write ratio: <input name="rw_ratio" id="rw_ratio"></input>
-    <button id="start" onClick="startSimulate">Start</button>
-    <button id="stop" onClick="stopSimulate">Stop</button>
-</form>
 
 </body>
 </html>
