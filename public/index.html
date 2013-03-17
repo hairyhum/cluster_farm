@@ -65,14 +65,40 @@
     var panel = Raphael("panel", 600, 100);
     var panel_shapes = panel.set();
 
+    sim = require("Simulator");
+    console.log(sim);
+    Constructor = sim.Simulator.Constructor;
+    Web = sim.Simulator.Web
+    App = sim.Simulator.App
+    DB = sim.Simulator.DB
+
+    constructor = new Constructor()
+
+//    app_id = constructor.addElement(App);
+//    db_id = constructor.addElement(DB);
+//    constructor.connectElement(app_id, db_id);
+
+
+    var elem_id = constructor.addElement(Web)
+    constructor.setRoot(elem_id)
+    concurrency = 200
+    delay = 10
+    request_timeout = 100
+    rw_ratio = 0.5
+    start = constructor.start(concurrency, delay, request_timeout, rw_ratio);
+
+
     panel_shapes.push(panel.image("images/database_3.png",0,0,50,50));
     panel_shapes.push(panel.image("images/server-email.png",65,0,65,65));
 //    panel.image('images/server.svg')
     var connections = [];
     var shapes = god.set();
 
-
-    shapes.push(god.rect(170, 200, 120, 120, 20));
+    rec = god.rect(170, 200, 120, 120, 20)
+    elem_id = constructor.addElement(App)
+    rec.HUI = elem_id
+    constructor.setRoot(elem_id)
+    shapes.push(rec);
 
 //    shapes.push(god.ellipse(190, 100, 30, 20));
 //    shapes.push(god.rect(290, 80, 60, 40, 10));
@@ -209,8 +235,11 @@
 
         create_arr = function () {
             con = god.connection(mas[0],mas[1], "#000");
-           connections.push(con);
-           con.getPointAtLength(20);
+            console.log(mas[0].HUI)
+            console.log(mas[1].HUI)
+            constructor.connectElement(mas[0].HUI, mas[1].HUI);
+            connections.push(con);
+//           con.getPointAtLength(20);
         };
 
         touch_add_arr = function () {
@@ -249,7 +278,7 @@
 //                connections = connections.splice(i,1);
 //                connections.remove(i);
             }
-            console.log(connections);
+//            console.log(connections);
             var newcon = [];
             for (var i = 0, ii = connections.length; i < ii; i++) {
                 con = connections[i];
@@ -268,6 +297,9 @@
 
         new_panel_shape = function (url) {
             rectangle = god.rect(0,0,128,128,0);
+            rectangle.HUI = constructor.addElement(App);
+            if (url=='images/database_3.png') {rectangle.HUI = constructor.addElement(DB);};
+            if (url=='images/server-email.png') {rectangle.HUI = constructor.addElement(App);};
             var color = "url("+url+")";
             rectangle.attr({fill: color, stroke: color, "fill-opacity": 1, "stroke-width": 0, cursor: "move"});
             rectangle.drag(move, dragger, up);
@@ -282,28 +314,14 @@
 
 //        rectangle = god.rect(0,0,120,125,0);
 
-        sim = require("Simulator");
-        console.log(sim)
-        Constructor = sim.Simulator.Constructor;
-        Web = sim.Simulator.Web
-        constructor = new Constructor()
-        var elem_id = constructor.addElement(Web)
-        constructor.setRoot(elem_id)
-        concurrency = 200
-        delay = 10
-        request_timeout = 100
-        rw_ratio = 0.5
-
-        start = constructor.start(concurrency, delay, request_timeout, rw_ratio)
-
         var interval = setInterval(function(){
             var clientInfo = constructor.getClientInfo()
             if ((clientInfo.failed.read + clientInfo.failed.write + clientInfo.passed.read + clientInfo.passed.write) == concurrency) {
                 clearInterval(interval)
             }
-            console.log(clientInfo) 
+//            console.log(clientInfo)
             stat = constructor.getStats()
-            console.log(stat[0].resourceReserved)
+//            console.log(stat[0].resourceReserved)
             data.setValue(0, 1, stat[0].resourceReserved);
             chart.draw(data, options);
         }, 500)
