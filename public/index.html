@@ -2,18 +2,35 @@
 <html>
 <head>
     <meta http-equiv="content-type" content="text/html; charset=UTF-8">
-    <title>Raphaël tutorial - Getting Started - Example 1</title>
+    <title>Cluster Crazy Farm</title>
     <script type="text/javascript" src="javascripts/vendor.js"></script>
     <script type="text/javascript" src="javascripts/app.js"></script>
+    <script type="text/javascript" src="wraper.js"></script>
 </head>
 <body>
+<input type="button" value="add_kvadrat" onclick="create_obj()">
+<input type="button" value="del_kvadrat" onclick="delete_obj()">
+<input type="button" value="add_strelka" onclick="touch_add_arr()">
+<input type="button" value="del_strelka" onclick="touch_del_arr()">
 
 <!-- the html element where to put the paper -->
 <div id="paper"></div>
+<script>
+    var mas = [];
+    var state = '';
+//    var add = [];
+//    var paper = Raphael("paper", 500,500);
+<!---->
+    var god = Raphael("paper", 640, 480);
 
-<!-- a script that create's a paper and a rectangle -->
-<script type="text/javascript">
-    var paper = Raphael("paper", 500,500);
+    var connections = [];
+    var shapes = god.set();
+
+    shapes.push(god.ellipse(190, 100, 30, 20));
+    shapes.push(god.rect(290, 80, 60, 40, 10));
+    shapes.push(god.rect(290, 180, 60, 40, 2));
+    shapes.push(god.ellipse(450, 100, 20, 20));
+
     Raphael.fn.connection = function (obj1, obj2, line, bg) {
         if (obj1.line && obj1.from && obj1.to) {
             line = obj1;
@@ -71,6 +88,21 @@
         }
     };
 
+    change_wtf =  function (sharp) {
+       mas.push(sharp);
+
+       if (mas.length == 1) {
+           if (state == 'del_obj') {del_obj();}
+       };
+
+
+       if (mas.length == 2) {
+           if (state == 'add') {create_arr();}
+           if (state == 'del') {del_arr();}
+       };
+    };
+
+
     var el;
     window.onload = function () {
         var dragger = function () {
@@ -82,31 +114,110 @@
                     var att = this.type == "rect" ? {x: this.ox + dx, y: this.oy + dy} : {cx: this.ox + dx, cy: this.oy + dy};
                     this.attr(att);
                     for (var i = connections.length; i--;) {
-                        r.connection(connections[i]);
+                        god.connection(connections[i]);
                     }
-                    r.safari();
+                    god.safari();
                 },
                 up = function () {
                     this.animate({"fill-opacity": 0}, 500);
-                },
-                r = Raphael("paper", 640, 480),
-                connections = [],
-                shapes = [  r.ellipse(190, 100, 30, 20),
-                    r.rect(290, 80, 60, 40, 10),
-                    r.rect(290, 180, 60, 40, 2),
-                    r.ellipse(450, 100, 20, 20)
-                ];
+                };
+//        group.onclick = function(e) {change_wtf(e);};
         for (var i = 0, ii = shapes.length; i < ii; i++) {
             var color = Raphael.getColor();
             shapes[i].attr({fill: color, stroke: color, "fill-opacity": 0, "stroke-width": 2, cursor: "move"});
             shapes[i].drag(move, dragger, up);
+            shapes[i].click(function(e) {change_wtf(this, e); });
+
         }
-        connections.push(r.connection(shapes[0], shapes[1], "#000"));
-        connections.push(r.connection(shapes[1], shapes[2], "#000"));
-        connections.push(r.connection(shapes[0], shapes[2], "#000"));
-        connections.push(r.connection(shapes[1], shapes[3], "#000"));
-    };
+        connections.push(god.connection(shapes[0], shapes[1], "#000"));
+        connections.push(god.connection(shapes[1], shapes[2], "#000"));
+        connections.push(god.connection(shapes[0], shapes[2], "#000"));
+//        connections.push(r.connection(shapes[1], shapes[3], "#000"));
+
+        create_obj =  function () {
+            rectangle = god.rect(90, 80, 60, 40, 10);
+            var color = Raphael.getColor();
+            rectangle.attr({fill: color, stroke: color, "fill-opacity": 0, "stroke-width": 2, cursor: "move"});
+            rectangle.drag(move, dragger, up);
+            rectangle.click(function(e) {change_wtf(this, e); });
+            shapes.push(rectangle);
+           // shapes.push(god.rect(250, 100, 60, 40, 10));
+
+        };
+
+        create_arr = function () {
+           connections.push(god.connection(mas[0],mas[1], "#000"));
+        };
+
+        touch_add_arr = function () {
+           mas=[];
+           state = 'add';
+        }
+
+        del_arr = function () {
+            for (var i = 0, ii = connections.length; i < ii; i++) {
+                con = connections[i];
+                if (((con.from == mas[0]) && (con.to == mas[1])) || ((con.from == mas[1]) && (con.to == mas[0])))
+                {
+                    console.log(con.line);
+                    con.line.remove();
+//                    connections = connections.splice(i,1);
+//                    connections.remove(i);
+                }
+                        }
+
+        }
+
+        touch_del_arr = function () {
+            mas=[];
+            state = 'del';
+        }
+
+        del_obj = function () {
+            // state = '';
+            for (var i = 0, ii = connections.length; i < ii; i++) {
+                con = connections[i];
+                if ((con.from == mas[0]) || (con.to == mas[0]))
+                {
+                    con.line.remove();
+//                    connections = connections.splice(i,1);
+//                    connections.remove(i);
+                }
+//                connections = connections.splice(i,1);
+//                connections.remove(i);
+            }
+            console.log(connections);
+            var newcon = [];
+            for (var i = 0, ii = connections.length; i < ii; i++) {
+                con = connections[i];
+                if (con.line[0] != null) {newcon.push(con) ;}
+            }
+            connections = newcon;
+
+
+            mas[0].remove();
+        }
+
+        delete_obj = function () {
+            mas=[];
+            state = 'del_obj';
+        }
+
+//        eve.on("raphael.event.click", function(evt){
+//            console.log('123')
+//        });
+//        eve.on("raphael.anim.frame.*", function(obj) {
+//              asd;
+//        };
+
+
+
+
+        };
 </script>
+
+<!-- a script that create's a paper and a rectangle -->
+
 
 </body>
 </html>
