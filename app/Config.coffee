@@ -14,7 +14,9 @@ Config =
   
   resource_limit: 100
 
+  cache_reserve_read: 1
+
   proc_min_latency: 1
-  proc_max_latency: @resource_limit
+  proc_max_latency: 100
 
 exports.Config = Config

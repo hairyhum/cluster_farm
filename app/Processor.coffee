@@ -29,7 +29,8 @@ class Processor extends Component
       @reserveWrite()
 
   latency: () ->
-    @min_latency() + Math.pow(@exp_base(), @resource_reserved)
+    lat = @min_latency() + Math.pow(@exp_base(), @resource_reserved)
+    lat
 
   exp_base: () ->
     lat_diff = @max_latency() - @min_latency()

@@ -9,12 +9,14 @@
 {Component} = require './Component'
 {Events, Observer} = require './Observer'
 {Constructor} = require './Constructor'
+{Cache} = require './Cache'
 
 Simulator = {
   App
   Client
   Config
   DB
+  Cache
   Network
   Schema
   Web

@@ -74,7 +74,6 @@ class Component
     if @destinations.length == 0
       () => 
         req.incAge @latency()
-        # console.log req.age
         req.terminate()
     else
       () => 
