@@ -7,35 +7,48 @@
     <script type="text/javascript" src="javascripts/app.js"></script>
 </head>
 <body>
-<div id="panel"></div>
-<input type="button" value="add_kvadrat" onclick="create_obj()">
-<input type="button" value="del_kvadrat" onclick="delete_obj()">
-<input type="button" value="add_strelka" onclick="touch_add_arr()">
-<input type="button" value="del_strelka" onclick="touch_del_arr()">
+<div>
+    <input type="button" value="del_kvadrat" onclick="delete_obj()">
+    <input type="button" value="add_strelka" onclick="touch_add_arr()">
+    <input type="button" value="del_strelka" onclick="touch_del_arr()">
+    <div id="panel">
+    <!--<input type="button" value="add_kvadrat" onclick="create_obj()">-->
+
+    </div>
+</div>
+
 <!-- the html element where to put the paper -->
-<div id="paper"></div>
+<div id="paper">
+</div>
+
 <script>
     var mas = [];
     var state = '';
 //    var add = [];
 //    var paper = Raphael("paper", 500,500);
 <!---->
-    var god = Raphael("paper", 600, 380);
+    var god = Raphael("paper", 600, 600);
 
-    var panel = Raphael("panel", 200, 100);
+    var panel = Raphael("panel", 600, 100);
     var panel_shapes = panel.set();
 
-    onclick="create_obj()"
-    panel_shapes.push(panel.image("images/database_3.png",0,0,100,100));
+    panel_shapes.push(panel.image("images/database_3.png",0,0,50,50));
+    panel_shapes.push(panel.image("images/server-email.png",65,0,65,65));
 //    panel.image('images/server.svg')
 
     var connections = [];
     var shapes = god.set();
 
-    shapes.push(god.ellipse(190, 100, 30, 20));
-    shapes.push(god.rect(290, 80, 60, 40, 10));
-    shapes.push(god.rect(290, 180, 60, 40, 2));
-    shapes.push(god.ellipse(450, 100, 20, 20));
+
+    rectangle = god.rect(170, 200, 120, 120, 20);
+
+    shapes.push(rectangle);
+
+//    shapes.push(god.ellipse(190, 100, 30, 20));
+//    shapes.push(god.rect(290, 80, 60, 40, 10));
+//    shapes.push(god.rect(290, 180, 60, 40, 2));
+//    shapes.push(god.ellipse(450, 100, 20, 20));
+    shapes.push(god.image("images/zombie.jpeg",65, 0, 120, 120));
 
     Raphael.fn.connection = function (obj1, obj2, line, bg) {
         if (obj1.line && obj1.from && obj1.to) {
@@ -84,10 +97,10 @@
             line.bg && line.bg.attr({path: path});
             line.line.attr({path: path});
         } else {
-            var color = typeof line == "string" ? line : "#000";
+            var color = typeof line == "string" ? line : "#972";
             return {
                 bg: bg && bg.split && this.path(path).attr({stroke: bg.split("|")[0], fill: "none", "stroke-width": bg.split("|")[1] || 3}),
-                line: this.path(path).attr({stroke: color, fill: "none"}),
+                line: this.path(path).attr({"stroke-width": 7, stroke: color, fill: "none"}),
                 from: obj1,
                 to: obj2
             };
@@ -96,7 +109,7 @@
 
     change_wtf =  function (sharp) {
        mas.push(sharp);
-
+//        sharp.getPointAtLength(20);
        if (mas.length == 1) {
            if (state == 'del_obj') {del_obj();}
        };
@@ -130,8 +143,9 @@
                 };
 //        group.onclick = function(e) {change_wtf(e);};
         for (var i = 0, ii = shapes.length; i < ii; i++) {
-            var color = Raphael.getColor();
-            shapes[i].attr({fill: color, stroke: color, "fill-opacity": 0, "stroke-width": 2, cursor: "move"});
+
+            var color = "url(images/server-email.png)";
+            shapes[i].attr({fill: color, stroke: color, "fill-opacity": 1, "stroke-width": 0, cursor: "move"});
             shapes[i].drag(move, dragger, up);
             shapes[i].click(function(e) {change_wtf(this, e); });
 
@@ -141,13 +155,15 @@
             var color = Raphael.getColor();
 //            panel_shapes[i].attr({fill: color, stroke: color, "fill-opacity": 0, "stroke-width": 2, cursor: "move"});
             panel_shapes[i].drag(move, dragger, up);
-            panel_shapes[i].click(function(e) {new_panel_shape(this, e); });
+            panel_shapes[i].click(function(e) {new_panel_shape(this.attrs.src); });
 
         }
 
-        connections.push(god.connection(shapes[0], shapes[1], "#000"));
-        connections.push(god.connection(shapes[1], shapes[2], "#000"));
-        connections.push(god.connection(shapes[0], shapes[2], "#000"));
+        con = god.connection(shapes[0], shapes[1], "#000")
+        connections.push(con);
+        con.getSubpath(con.from, con.to);
+//        connections.push(god.connection(shapes[1], shapes[2], "#000"));
+//        connections.push(god.connection(shapes[0], shapes[2], "#000"));
 //        connections.push(r.connection(shapes[1], shapes[3], "#000"));
 
         create_obj =  function () {
@@ -162,7 +178,9 @@
         };
 
         create_arr = function () {
-           connections.push(god.connection(mas[0],mas[1], "#000"));
+            con = god.connection(mas[0],mas[1], "#000");
+           connections.push(con);
+           con.getPointAtLength(20);
         };
 
         touch_add_arr = function () {
@@ -218,14 +236,16 @@
             state = 'del_obj';
         };
 
-        new_panel_shape = function () {
-            rectangle = god.rect(0,0,120,125,0);
-            var color = "url(images/database_3.png)";
+        new_panel_shape = function (url) {
+            rectangle = god.rect(0,0,128,128,0);
+            var color = "url("+url+")";
             rectangle.attr({fill: color, stroke: color, "fill-opacity": 1, "stroke-width": 0, cursor: "move"});
             rectangle.drag(move, dragger, up);
             rectangle.click(function(e) {change_wtf(this, e); });
             shapes.push(rectangle);
         };
+
+
 
 
 
