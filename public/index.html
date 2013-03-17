@@ -255,7 +255,7 @@
   
   <input name="resource_limit" id="resource_limit" type="range" min="0" max="200" step="1" value="100" />
 
-  <button>Apply</button>
+  <button id="save_settings" onClick="saveSettingsClick">Apply</button>
 
 </form>
 
@@ -264,8 +264,8 @@
     Time: <input name="delay" id="delay"></input>
     Timeout: <input name="timeout" id="timeout"></input>
     Read/Write ratio: <input name="rw_ratio" id="rw_ratio"></input>
-    <button id="start">Start</button>
-    <button id="stop">Stop</button>
+    <button id="start" onClick="startSimulate">Start</button>
+    <button id="stop" onClick="stopSimulate">Stop</button>
 </form>
 
 </body>
