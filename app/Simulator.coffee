@@ -8,6 +8,7 @@
 {Web} = require './Web'
 {Component} = require './Component'
 {Events, Observer} = require './Observer'
+{Constructor} = require './Constructor'
 
 Simulator = {
   App
@@ -22,6 +23,7 @@ Simulator = {
   RequestType
   Events
   Observer
+  Constructor
 }
 
 exports.Simulator = Simulator

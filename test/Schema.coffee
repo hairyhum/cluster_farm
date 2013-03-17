@@ -28,7 +28,7 @@ exports.ObserverTest =
 		console.log(root.reserveRead())
 		console.log(root.reserveWrite())
 		console.log(root.process(testRequest))
-		console.log(root.reserveResource(testRequest))
+		# console.log(root.reserveResource(testRequest))
 		console.log(root.requestReserves(testRequest))
 		console.log(root.latency())
 		console.log(root.exp_base())
@@ -45,7 +45,7 @@ exports.ObserverTest =
 		schema = new Schema
 		c1 = schema.addComponent new Web
 		schema.setRoot c1
-		console.log(c1.getId())
+		console.log(c1.id)
 		c2 = schema.addComponent new Component
-		test.equal(c2.getId(), schema.getElementById(c2.getId()).getId())
+		test.equal(c2.id, schema.getElementById(c2.id).id)
 		test.done()
