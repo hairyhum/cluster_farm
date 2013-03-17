@@ -278,6 +278,7 @@
         };
 
 
+//        console.log(connections[0].line.path);
 //        Raphael().prepare("Paper.path-extra").path("M10,10R90,50 10,90").attr(Raphael.line());
 
 
@@ -314,6 +315,38 @@
 </script>
 
 <!-- a script that create's a paper and a rectangle -->
+   <form>
+
+       <input name="app_reserve_write" id="app_reserve_write" type="range" min="0" max="10" step="1">
+
+       <input name="app_reserve_write" id="app_reserve_write" type="range" min="0" max="10" step="1" value="1">
+       <input name="app_reserve_read" id="app_reserve_read" type="range" min="0" max="10" step="1" value="3">
+
+       <input name="db_reserve_write" id="db_reserve_write" type="range" min="0" max="10" step="1" value="1">
+       <input name="db_reserve_read" id="db_reserve_read" type="range" min="0" max="10" step="1" value="3">
+
+       <input name="web_reserve_write" id="web_reserve_write" type="range" min="0" max="10" step="1" value="4">
+       <input name="web_reserve_read" id="web_reserve_read" type="range" min="0" max="10" step="1" value="4">
+       <input name="network_latency" id="network_latency" type="range" min="0" max="10" step="1" value="1">
+       <input name="router_latency" id="router_latency" type="range" min="0" max="10" step="1" value="0">
+
+
+       <input name="latency_ratio" id="latency_ratio" type="range" min="0" max="100" step="1" value="10">
+
+       <input name="resource_limit" id="resource_limit" type="range" min="0" max="200" step="1" value="100">
+
+       <button id="save_settings" onclick="saveSettingsClick">Apply</button>
+
+   </form>
+
+   <form>
+       Concurrency: <input name="concurrency" id="concurrency">
+       Time: <input name="delay" id="delay">
+       Timeout: <input name="timeout" id="timeout">
+       Read/Write ratio: <input name="rw_ratio" id="rw_ratio">
+       <button id="start" onclick="startSimulate">Start</button>
+       <button id="stop" onclick="stopSimulate">Stop</button>
+   </form>
 
 
 </body>

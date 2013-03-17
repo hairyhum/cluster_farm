@@ -116,6 +116,87 @@ window.require.register("test/Calculator.test", function(exports, require, modul
   };
   
 });
+window.require.register("test/Component.test", function(exports, require, module) {
+  var Component;
+
+  Component = require('../app/Component').Component;
+
+  exports.ComponentTest = {
+    'test constructor': function(test) {
+      var component;
+      component = new Component();
+      test.ok(component.id !== null);
+      return test.done();
+    }
+  };
+  
+});
+window.require.register("test/Constructor", function(exports, require, module) {
+  var App, Component, Constructor, DB, Events, Request, RequestType, Schema, Simulator, Web;
+
+  Simulator = require('../app/Simulator').Simulator;
+
+  Web = Simulator.Web, Schema = Simulator.Schema, Request = Simulator.Request, RequestType = Simulator.RequestType, Events = Simulator.Events, Component = Simulator.Component, Constructor = Simulator.Constructor, DB = Simulator.DB, App = Simulator.App;
+
+  exports.constrTest = {
+    'test addElement': function(test) {
+      this.constr = new Constructor();
+      this.constr.addElement(Web);
+      test.equal(2, this.constr.schema.components.length);
+      this.constr.addElement(Web);
+      test.equal(3, this.constr.schema.components.length);
+      return test.done();
+    },
+    'test deleteElement': function(test) {
+      var id;
+      this.constr = new Constructor();
+      this.constr.addElement(Web);
+      test.equal(2, this.constr.schema.components.length);
+      id = this.constr.addElement(DB);
+      test.equal(3, this.constr.schema.components.length);
+      this.constr.deleteElement(id);
+      test.equal(2, this.constr.schema.components.length);
+      return test.done();
+    },
+    'test connectElement': function(test) {
+      var first, second;
+      this.constr = new Constructor();
+      first = this.constr.addElement(Web);
+      test.equal(2, this.constr.schema.components.length);
+      second = this.constr.addElement(DB);
+      test.equal(3, this.constr.schema.components.length);
+      this.constr.connectElement(first, second);
+      test.ok(this.constr.validate);
+      return test.done();
+    },
+    'test disconnectElement': function(test) {
+      var first, second;
+      this.constr = new Constructor();
+      first = this.constr.addElement(Web);
+      test.equal(2, this.constr.schema.components.length);
+      second = this.constr.addElement(DB);
+      test.equal(3, this.constr.schema.components.length);
+      this.constr.connectElement(first, second);
+      test.ok(this.constr.validate);
+      this.constr.disconnectElement(first, second);
+      test.ok(this.constr.validate);
+      return test.done();
+    },
+    'test disconnectElement': function(test) {
+      var id;
+      this.constr = new Constructor();
+      id = this.constr.addElement(App);
+      test.equal(2, this.constr.schema.components.length);
+      this.constr.setRoot(id);
+      test.ok(this.constr.validate);
+      this.constr.disconnectElement(id, this.constr.schema.client.id);
+      test.equal(2, this.constr.schema.components.length);
+      test.ok(this.constr.validate);
+      return test.done();
+    }
+  };
+  
+});
 window.require.register("test/Observer.test", function(exports, require, module) {
   var Events, Observer, _ref;
 
@@ -221,34 +302,57 @@ window.require.register("test/Request.test", function(exports, require, module) 
   };
   
 });
-window.require.register("test/test", function(exports, require, module) {
-  var App, DB, Schema, Simulator, Web, app, db, schema, web;
+window.require.register("test/Schema", function(exports, require, module) {
+  var Component, Events, Request, RequestType, Schema, Simulator, Web;
 
-  Simulator = require('./app/Simulator').Simulator;
+  Simulator = require('../app/Simulator').Simulator;
 
-  App = Simulator.App, Web = Simulator.Web, DB = Simulator.DB, Schema = Simulator.Schema;
+  Web = Simulator.Web, Schema = Simulator.Schema, Request = Simulator.Request, RequestType = Simulator.RequestType, Events = Simulator.Events, Component = Simulator.Component;
 
-  schema = new Schema;
-
-  web = schema.addComponent(new Web);
-
-  app = schema.addComponent(new App);
-
-  db = schema.addComponent(new DB);
-
-  schema.connectComponents(app, db);
-
-  schema.setRoot(web);
-
-  schema.client.run(15, 10, 100, 0.5);
-
-  console.log(schema.client.report());
-
-  schema.setRoot(app);
-
-  schema.client.run(15, 10, 100, 0.5);
-
-  console.log(schema.client.report());
+  exports.ObserverTest = {
+    setUp: function(callback) {
+      return callback();
+    },
+    'test Schema': function(test) {
+      var root, schema, testRequest;
+      schema = new Schema;
+      root = schema.addComponent(new Web);
+      schema.setRoot(root);
+      testRequest = new Request(RequestType.read, 600);
+      console.log(schema.client.reset());
+      console.log(schema.client.run(15, 10, 100, 0.5));
+      console.log(schema.client.onRequestTerminated(testRequest));
+      console.log(schema.client.generate_requests(10, 100, 0.5));
+      console.log('sleep');
+      setTimeout((function() {
+        console.log(schema.client.subscribers[Events.read_request]);
+        console.log(schema.client.subscribers[Events.write_request]);
+        return console.log(schema.client.destinations[0].component);
+      }), 2000);
+      console.log("root");
+      console.log(root.reserveRead());
+      console.log(root.reserveWrite());
+      console.log(root.process(testRequest));
+      console.log(root.requestReserves(testRequest));
+      console.log(root.latency());
+      console.log(root.exp_base());
+      console.log(root.min_latency());
+      console.log(root.max_latency());
+      console.log(root.destination());
+      test.equal(1, 1);
+      return test.done();
+    },
+    'test get element by id': function(test) {
+      var c1, c2, schema;
+      schema = new Schema;
+      c1 = schema.addComponent(new Web);
+      schema.setRoot(c1);
+      console.log(c1.id);
+      c2 = schema.addComponent(new Component);
+      test.equal(c2.id, schema.getElementById(c2.id).id);
+      return test.done();
+    }
+  };
   
 });
 
