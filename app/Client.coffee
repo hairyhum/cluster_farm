@@ -2,6 +2,7 @@
 {Events} = require './Observer'
 {Component} = require './Component'
 {Config} = require './Config'
+{Timeouts} = require './Time'
 
 
 class Client extends Component
@@ -10,6 +11,7 @@ class Client extends Component
     super()
 
   reset: () ->
+    Timeouts.clearTimeouts()
     @failed =
       read: 0
       write: 0
@@ -17,6 +19,9 @@ class Client extends Component
     @passed =
       read: 0
       write: 0
+
+  terminate: () ->
+    Timeouts.clearTimeouts()
 
   run: (concurrency, delay, request_timeout, rw_ratio) ->
     @reset()
@@ -56,7 +61,7 @@ Array::asyncForEach = (timeout, fn) ->
   iterFun = () =>
     unless index is @length
       fn(@[index], index++)
-      setTimeout iterFun, timeout
-  setTimeout(iterFun, 0)
+      Timeouts.addTimeout iterFun, timeout
+  Timeouts.addTimeout iterFun, 0
 
 exports.Client = Client

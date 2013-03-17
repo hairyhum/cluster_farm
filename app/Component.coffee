@@ -1,5 +1,6 @@
 {Events} = require './Observer'
 {Config} = require './Config'
+{Timeouts} = require './Time'
 
 class Component
   constructor: () ->
@@ -57,7 +58,7 @@ class Component
   process: (req) ->
     callback = @processCallback req
     timeout = Config.latency_ratio * @latency()
-    setTimeout callback, timeout
+    Timeouts.addTimeout callback, timeout
   
   processCallback: (req) ->
     if @destinations.length == 0
