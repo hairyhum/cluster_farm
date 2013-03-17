@@ -97,14 +97,11 @@
 //    db_id = constructor.addElement(DB);
 //    constructor.connectElement(app_id, db_id);
 
-
-    var elem_id = constructor.addElement(Web)
-    constructor.setRoot(elem_id)
-    concurrency = 200
-    delay = 10
-    request_timeout = 100
-    rw_ratio = 0.5
-    start = constructor.start(concurrency, delay, request_timeout, rw_ratio);
+//    concurrency = 200
+//    delay = 10
+//    request_timeout = 100
+//    rw_ratio = 0.5
+//    start = constructor.start(concurrency, delay, request_timeout, rw_ratio);
 
 
     panel_shapes.push(panel.image("images/database_3.png",0,0,50,50));
@@ -333,17 +330,7 @@
 
 //        rectangle = god.rect(0,0,120,125,0);
 
-        var interval = setInterval(function(){
-            var clientInfo = constructor.getClientInfo()
-            if ((clientInfo.failed.read + clientInfo.failed.write + clientInfo.passed.read + clientInfo.passed.write) == concurrency) {
-                clearInterval(interval)
-            }
-//            console.log(clientInfo)
-            stat = constructor.getStats()
-//            console.log(stat[0].resourceReserved)
-            data.setValue(0, 1, stat[0].resourceReserved);
-            chart.draw(data, options);
-        }, 500)
+
 
 
         };
@@ -378,15 +365,32 @@
     }
 
     function stopSimulate(){
+        constructor.stop()
+        clearInterval(interval)
+    }
+    var interval
+    function startSimulate(){
+
+
         con = parseInt(document.getElementById('concurrency').value);
         delay = parseInt(document.getElementById('delay').value);
         tout = parseInt(document.getElementById('timeout').value);
         ratio = parseFloat(document.getElementById('rw_ratio').value);
         constructor.start(con, delay, tout, ratio)
-    }
 
-    function startSimulate(){
-        constructor.stop()
+        interval = setInterval(function(){
+            var clientInfo = constructor.getClientInfo()
+            if ((clientInfo.failed.read + clientInfo.failed.write + clientInfo.passed.read + clientInfo.passed.write) == con) {
+                clearInterval(interval)
+            }
+//            console.log(interval)
+//            console.log(clientInfo)
+            stat = constructor.getStats()
+            console.log(stat[0].resourceReserved)
+            data.setValue(0, 1, stat[0].resourceReserved);
+            chart.draw(data, options);
+        }, 500)
+
     }
 
 
