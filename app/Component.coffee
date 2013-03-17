@@ -33,7 +33,7 @@ class Component
     source.add_dest @
 
   remove_source: () ->
-    @source.remove_dest @
+    @source?.remove_dest @
 
   add_dest: (component) ->
     component.source = @
@@ -48,14 +48,16 @@ class Component
       @subscribe event, callback
 
   remove_dest: (component) ->
-    {component, callback} = (@destinations.filter (dest) ->
+    comp = (@destinations.filter (dest) ->
       dest.component is component)[0]
-    events = component.events()
-    events.forEach (event) =>
-      @unsubscribe event, callback
-    @destinations = @destinations.filter (dest) ->
-      dest.component isnt component
-    component.source = undefined
+    if comp? 
+      {component, callback} = comp
+      events = component.events()
+      events.forEach (event) =>
+        @unsubscribe event, callback
+      @destinations = @destinations.filter (dest) ->
+        dest.component isnt component
+      component.source = undefined
 
   hasDestinations: () ->
     @destinations.length > 0

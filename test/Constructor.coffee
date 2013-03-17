@@ -1,5 +1,5 @@
 {Simulator} = require '../app/Simulator'
-{Web, Schema, Request, RequestType, Events, Component, Constructor} = Simulator
+{Web, Schema, Request, RequestType, Events, Component, Constructor, DB, App} = Simulator
 
 exports.constrTest =
 	'test addElement': (test) ->
@@ -10,6 +10,48 @@ exports.constrTest =
 		test.equal(3, @constr.schema.components.length)
 		test.done()
 
+	'test deleteElement': (test) ->
+		@constr = new Constructor()	
+		@constr.addElement(Web)
+		test.equal(2, @constr.schema.components.length)
+		id = @constr.addElement(DB)
+		test.equal(3, @constr.schema.components.length)
+		@constr.deleteElement(id)
+		test.equal(2, @constr.schema.components.length)
+		test.done()
+
+	'test connectElement': (test) ->
+		@constr = new Constructor()	
+		first = @constr.addElement(Web)
+		test.equal(2, @constr.schema.components.length)
+		second = @constr.addElement(DB)
+		test.equal(3, @constr.schema.components.length)
+		@constr.connectElement(first, second)
+		test.ok(@constr.validate)
+		test.done()
+
+	'test disconnectElement': (test) ->
+		@constr = new Constructor()	
+		first = @constr.addElement(Web)
+		test.equal(2, @constr.schema.components.length)
+		second = @constr.addElement(DB)
+		test.equal(3, @constr.schema.components.length)
+		@constr.connectElement(first, second)
+		test.ok(@constr.validate)
+		@constr.disconnectElement(first, second)
+		test.ok(@constr.validate)
+		test.done()
+
+	'test disconnectElement': (test) ->
+		@constr = new Constructor()	
+		id = @constr.addElement(App)
+		test.equal(2, @constr.schema.components.length)
+		@constr.setRoot(id);
+		test.ok(@constr.validate)
+		@constr.disconnectElement(id, @constr.schema.client.id)
+		test.equal(2, @constr.schema.components.length)
+		test.ok(@constr.validate)
+		test.done()
 
 	# 'test Schema': (test) ->
 	# 	schema = new Schema
