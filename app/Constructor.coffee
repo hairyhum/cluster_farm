@@ -31,13 +31,8 @@ class Constructor
 		@schema.removeComponent(@schema.getElementById(elementId))	
 
 	connectElement: (firstElementId, secondElementId) ->
-		firstElement = @schema.getElementById(firstElementId)
-		secondElement = @schema.getElementById(secondElementId)
-		if @schema.isConnected(firstElement, secondElement)
-			@schema.connectComponents(firstElement, secondElement)
-		else
-			@schema.connectComponents(secondElement, firstElement)
-
+		@schema.connectComponents(firstElement, secondElement)
+		
 	disconnectElement: (firstElementId, secondElementId) ->
 		firstElement = @schema.getElementById(firstElementId)
 		secondElement = @schema.getElementById(secondElementId)

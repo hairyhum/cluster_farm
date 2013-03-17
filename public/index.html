@@ -312,39 +312,71 @@
         };
 </script>
 
+<script type="text/javascript">
+    var config_settings = [
+        "app_reserve_write",
+          "app_reserve_read",
+          "db_reserve_write",
+          "db_reserve_read",
+          "web_reserve_write",
+          "web_reserve_read",
+          "latency_ratio",
+          "network_latency",
+          "router_latency",
+          "resource_limit",
+          "cache_reserve_read"
+      ];
+    function saveSettingsClick(){
+      console.log(config_settings);
+      var i = 0;
+      var length = config_settings.length;
+      for(i; i < length; i++){
+        var setting = config_settings[i]
+        var setting_value = document.getElementById(setting).value;
+        Config = require("Simulator").Simulator.Config;
+        console.log(setting + " : " + setting_value);
+        Config[setting] = parseInt(setting_value);
+      }
+      return false;
+    }
+</script>
+
 <!-- a script that create's a paper and a rectangle -->
-   <form>
+   <div>
 
-       <input name="app_reserve_write" id="app_reserve_write" type="range" min="0" max="10" step="1">
+       <br /> app_reserve_write: <input name="app_reserve_write" id="app_reserve_write" type="range" min="0" max="10" step="1">
 
-       <input name="app_reserve_write" id="app_reserve_write" type="range" min="0" max="10" step="1" value="1">
-       <input name="app_reserve_read" id="app_reserve_read" type="range" min="0" max="10" step="1" value="3">
+       <br /> app_reserve_write: <input name="app_reserve_write" id="app_reserve_write" type="range" min="0" max="10" step="1" value="1">
+       <br /> app_reserve_read: <input name="app_reserve_read" id="app_reserve_read" type="range" min="0" max="10" step="1" value="3">
 
-       <input name="db_reserve_write" id="db_reserve_write" type="range" min="0" max="10" step="1" value="1">
-       <input name="db_reserve_read" id="db_reserve_read" type="range" min="0" max="10" step="1" value="3">
+       <br /> db_reserve_write: <input name="db_reserve_write" id="db_reserve_write" type="range" min="0" max="10" step="1" value="1">
+       <br /> db_reserve_read: <input name="db_reserve_read" id="db_reserve_read" type="range" min="0" max="10" step="1" value="3">
 
-       <input name="web_reserve_write" id="web_reserve_write" type="range" min="0" max="10" step="1" value="4">
-       <input name="web_reserve_read" id="web_reserve_read" type="range" min="0" max="10" step="1" value="4">
-       <input name="network_latency" id="network_latency" type="range" min="0" max="10" step="1" value="1">
-       <input name="router_latency" id="router_latency" type="range" min="0" max="10" step="1" value="0">
+       <br /> web_reserve_write: <input name="web_reserve_write" id="web_reserve_write" type="range" min="0" max="10" step="1" value="4">
+       <br /> web_reserve_read: <input name="web_reserve_read" id="web_reserve_read" type="range" min="0" max="10" step="1" value="4">
+       <br /> network_latency: <input name="network_latency" id="network_latency" type="range" min="0" max="10" step="1" value="1">
+       <br /> router_latency: <input name="router_latency" id="router_latency" type="range" min="0" max="10" step="1" value="0">
 
 
-       <input name="latency_ratio" id="latency_ratio" type="range" min="0" max="100" step="1" value="10">
+       <br /> latency_ratio: <input name="latency_ratio" id="latency_ratio" type="range" min="0" max="100" step="1" value="10">
 
-       <input name="resource_limit" id="resource_limit" type="range" min="0" max="200" step="1" value="100">
+       <br /> resource_limit: <input name="resource_limit" id="resource_limit" type="range" min="0" max="200" step="1" value="100">
+       <br /> cache_reserve_read: <input name="cache_reserve_read" id="cache_reserve_read" type="range" min="0" max="10" step="1" value="1">
 
-       <button id="save_settings" onclick="saveSettingsClick">Apply</button>
+       <br />
+       <button id="save_settings" onclick="saveSettingsClick()">Apply</button>
 
-   </form>
+   </div>
 
-   <form>
-       Concurrency: <input name="concurrency" id="concurrency">
-       Time: <input name="delay" id="delay">
-       Timeout: <input name="timeout" id="timeout">
-       Read/Write ratio: <input name="rw_ratio" id="rw_ratio">
-       <button id="start" onclick="startSimulate">Start</button>
-       <button id="stop" onclick="stopSimulate">Stop</button>
-   </form>
+   <div>
+       <br />Concurrency: <input name="concurrency" id="concurrency" value="30">
+       <br />Time: <input name="delay" id="delay" value="20">
+       <br />Timeout: <input name="timeout" id="timeout" value="40">
+       <br />Read/Write ratio: <input name="rw_ratio" id="rw_ratio" value="0.1">
+       <br />
+       <button id="start" onclick="startSimulate()">Start</button>
+       <button id="stop" onclick="stopSimulate()">Stop</button>
+   </div>
 
 
 </body>
