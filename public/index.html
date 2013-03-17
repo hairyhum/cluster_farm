@@ -8,16 +8,33 @@
     <script type='text/javascript' src='http://www.google.com/jsapi'></script>
 </head>
 <body>
-   <div id='chart_div'></div>
+<div id='settings' style="width:400px; float:right">
+    <br />Concurrency: <input name="concurrency" id="concurrency" value="30">
+    <br />Time: <input name="delay" id="delay" value="20">
+    <br />Timeout: <input name="timeout" id="timeout" value="40">
+    <br />Read/Write ratio: <input name="rw_ratio" id="rw_ratio" value="0.1">
+    <br />
+    <button id="start" onclick="startSimulate()">Start</button>
+    <button id="stop" onclick="stopSimulate()">Stop</button>
+
+</div>
+<div id='chart_div' style="width:400px">
+
+</div>
+
 <div>
     <input type="button" value="del_kvadrat" onclick="delete_obj()">
     <input type="button" value="add_strelka" onclick="touch_add_arr()">
     <input type="button" value="del_strelka" onclick="touch_del_arr()">
+
     <div id="panel">
+
         
     <!--<input type="button" value="add_kvadrat" onclick="create_obj()">-->
 
     </div>
+
+
 </div>
 
 
@@ -27,6 +44,8 @@
  
 
 <script type="text/javascript">
+
+
 
     google.load('visualization', '1', {packages:['gauge']});
     google.setOnLoadCallback(drawChart);
@@ -357,6 +376,20 @@
       }
       return false;
     }
+
+    function stopSimulate(){
+        con = parseInt(document.getElementById('concurrency').value);
+        delay = parseInt(document.getElementById('delay').value);
+        tout = parseInt(document.getElementById('timeout').value);
+        ratio = parseFloat(document.getElementById('rw_ratio').value);
+        constructor.start(con, delay, tout, ratio)
+    }
+
+    function startSimulate(){
+        constructor.stop()
+    }
+
+
 </script>
 
 <!-- a script that create's a paper and a rectangle -->
@@ -386,15 +419,7 @@
 
    </div>
 
-   <div>
-       <br />Concurrency: <input name="concurrency" id="concurrency" value="30">
-       <br />Time: <input name="delay" id="delay" value="20">
-       <br />Timeout: <input name="timeout" id="timeout" value="40">
-       <br />Read/Write ratio: <input name="rw_ratio" id="rw_ratio" value="0.1">
-       <br />
-       <button id="start" onclick="startSimulate()">Start</button>
-       <button id="stop" onclick="stopSimulate()">Stop</button>
-   </div>
+
 
 
 </body>
