@@ -1,6 +1,24 @@
+{Schema} = require './Schema'
+
 class Constructor
 	constructor: () ->
 		@schema = new Schema
+
+	start: (concurrency, delay, request_timeout, rw_ratio) ->
+		try
+			@schema.runClient(concurrency, delay, request_timeout, rw_ratio)		
+			true
+		catch ex
+			false
+
+	stop: () ->
+		@schema.client.terminate()
+
+	getClientInfo: () ->
+		@schema.client.report()
+
+	validate: () ->
+		@schema.validate()
 
 	setRoot: (elementId) ->
 		@schema.setRoot(@schema.getElementById(elementId))	
@@ -31,3 +49,5 @@ class Constructor
 	getStats: () ->
 		@schema.components.map (c) ->
 			{ id: c.id, resourceReserved: c.resource_reserved?() }
+
+exports.Constructor = Constructor
