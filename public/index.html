@@ -17,6 +17,37 @@
     <button id="start" onclick="startSimulate()">Start</button>
     <button id="stop" onclick="stopSimulate()">Stop</button>
 
+    <table border="1">
+    <tr>
+        <th>
+        </th>
+        <th>
+            <b>Read</b>
+        </th>
+        <th>
+            <b>Write</b>
+        </th>
+    </tr>
+    <tr>
+        <td>
+            <b>Passed</b>
+        </td>
+        <td id="passed_read">
+        </td>
+        <td id="passed_write">
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <b>Failed</b>
+        </td>
+        <td id="fail_read">
+        </td>
+        <td id="fail_write">
+        </td>
+    </tr>
+</table>
+
 </div>
 <div id='chart_div' style="width:400px">
 
@@ -380,15 +411,20 @@
 
         interval = setInterval(function(){
             var clientInfo = constructor.getClientInfo()
-            if ((clientInfo.failed.read + clientInfo.failed.write + clientInfo.passed.read + clientInfo.passed.write) == con) {
-                clearInterval(interval)
-            }
+            document.getElementById('passed_read').innerHTML =clientInfo.passed.read;
+            document.getElementById('passed_write').innerHTML= clientInfo.passed.write;
+            document.getElementById('fail_read').innerHTML= clientInfo.failed.read;
+            document.getElementById('fail_write').innerHTML= clientInfo.failed.write;
+
 //            console.log(interval)
 //            console.log(clientInfo)
             stat = constructor.getStats()
             console.log(stat[0].resourceReserved)
             data.setValue(0, 1, stat[0].resourceReserved);
             chart.draw(data, options);
+            if ((clientInfo.failed.read + clientInfo.failed.write + clientInfo.passed.read + clientInfo.passed.write) == con) {
+                clearInterval(interval)
+            }
         }, 500)
 
     }
